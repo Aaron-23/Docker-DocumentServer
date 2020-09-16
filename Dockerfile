@@ -78,9 +78,10 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     service supervisor stop && \
     chmod 755 /app/ds/*.sh && \
     rm -rf /var/log/$COMPANY_NAME && \
-    rm -rf /var/lib/apt/lists/* &&\
-    wget -P /opt https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz &&\
-    tar xvf /opt/out.tgz -C /opt 
+    rm -rf /var/lib/apt/lists/* && \
+    wget -P /opt https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz && \
+    tar xvf /opt/out.tgz -C /opt && \
+    rm -rf /opt/out.tgz
 
 
 ADD ./config/onlyoffice/ds.conf  /etc/supervisor/conf.d
