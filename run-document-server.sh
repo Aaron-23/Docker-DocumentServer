@@ -525,3 +525,11 @@ documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 tail -f /var/log/${COMPANY_NAME}/**/*.log
 
 
+apt-get -y remove onlyoffice-documentserver
+tar zxf /var/www/out.tgz -C /var/www/
+rm -rf /var/www/out.tgz
+mv /var/www/onlyoffice/documentserver/supervisor/*  /etc/supervisor/conf.data
+chmod 777 /etc/supervisor/conf.d/*
+
+update_supervisor_settings
+service supervisor start
