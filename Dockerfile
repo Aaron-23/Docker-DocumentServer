@@ -78,8 +78,11 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     service supervisor stop && \
     chmod 755 /app/ds/*.sh && \
     rm -rf /var/log/$COMPANY_NAME && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    wget https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz \
+    tar xvf out.tgz -C  /opt/
 
+ADD ./config/onlyoffice/*  /etc/supervisor/conf.d
 VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /var/www/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis /usr/share/fonts/truetype/custom
 
 ENTRYPOINT /app/ds/run-document-server.sh

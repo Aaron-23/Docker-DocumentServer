@@ -523,3 +523,5 @@ documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
 documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
 tail -f /var/log/${COMPANY_NAME}/**/*.log
+
+
