@@ -79,16 +79,12 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     chmod 755 /app/ds/*.sh && \
     rm -rf /var/log/$COMPANY_NAME && \
     rm -rf /var/lib/apt/lists/* && \
-    wget -P /opt https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz && \
-    tar xvf /opt/out.tgz -C /opt && \
-    rm -rf /opt/out.tgz
+    wget -P /var/www/  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz && \
+    tar zxf /var/www/out.tgz -C /var/www/ && \
+    rm -rf /var/www/out.tgz  && \
+    mv /var/www/onlyoffice/documentserver/supervisor/*  /etc/supervisor/conf.d && \
+    chmod 777 /etc/supervisor/conf.d/*
 
-
-ADD ./config/onlyoffice/ds.conf  /etc/supervisor/conf.d
-ADD ./config/onlyoffice/ds-converter.conf  /etc/supervisor/conf.d
-ADD ./config/onlyoffice/ds-docservice.conf  /etc/supervisor/conf.d
-ADD ./config/onlyoffice/ds-metrics.conf  /etc/supervisor/conf.d
-ADD ./config/onlyoffice/ds-spellchecker.conf  /etc/supervisor/conf.d
 VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /var/www/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis /usr/share/fonts/truetype/custom
 
 ENTRYPOINT /app/ds/run-document-server.sh
