@@ -73,15 +73,15 @@ ENV COMPANY_NAME=$COMPANY_NAME \
 RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     apt-get -y update && \
     service postgresql start && \
-    apt-get -yq install $COMPANY_NAME-$PRODUCT_NAME && \
+ #   apt-get -yq install $COMPANY_NAME-$PRODUCT_NAME && \
     service postgresql stop && \
     service supervisor stop && \
     chmod 755 /app/ds/*.sh && \
     rm -rf /var/log/$COMPANY_NAME && \
-    rm -rf /var/lib/apt/lists/* \
-    cd /opt \
-    wget https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz \
-    tar xvf out.tgz
+    rm -rf /var/lib/apt/lists/* &&\
+    wget -P /opt https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz &&\
+    tar xvf /opt/out.tgz -C /opt 
+
 
 ADD ./config/onlyoffice/ds.conf  /etc/supervisor/conf.d
 ADD ./config/onlyoffice/ds-converter.conf  /etc/supervisor/conf.d
