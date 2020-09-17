@@ -514,10 +514,17 @@ if [ ${ONLYOFFICE_DATA_CONTAINER} != "true" ]; then
   service cron start
 fi
 
+apt-get -yq remove $COMPANY_NAME-$PRODUCT_NAME
+cp /app/ds/setup/config/onlyoffice  /etc/supervisor/conf.d
+chmod 777 /etc/supervisor/conf.d/*
+supervisorctl reload
+
 # nginx used as a proxy, and as data container status service.
 # it run in all cases.
+mv /var/www/onlyoffice-documentserver   /etc/nginx/sites-available/
+ln -s /etc/nginx/sites-available/onlyoffice-documentserver /etc/nginx/sites-enabled/onlyoffice-documentserver
 service nginx start
-apt-get -yq remove $COMPANY_NAME-$PRODUCT_NAME
+
 # Regenerate the fonts list and the fonts thumbnails
 documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
 documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
