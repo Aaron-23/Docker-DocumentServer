@@ -64,17 +64,17 @@ COPY run-document-server.sh /app/ds/run-document-server.sh
 
 EXPOSE 80 443
 
-#ARG REPO_URL="deb http://download.onlyoffice.com/repo/debian squeeze main"
-#ARG COMPANY_NAME=onlyoffice
-#ARG PRODUCT_NAME=documentserver
+ARG REPO_URL="deb http://download.onlyoffice.com/repo/debian squeeze main"
+ARG COMPANY_NAME=onlyoffice
+ARG PRODUCT_NAME=documentserver
 
-#ENV COMPANY_NAME=$COMPANY_NAME \
-#    PRODUCT_NAME=$PRODUCT_NAME
+ENV COMPANY_NAME=$COMPANY_NAME \
+    PRODUCT_NAME=$PRODUCT_NAME
 
-#RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
-#    apt-get -y update && \
- RUN   service postgresql start && \
-#    apt-get -yq install $COMPANY_NAME-$PRODUCT_NAME && \
+RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
+    apt-get -y update && \
+    service postgresql start && \
+    apt-get -yq install $COMPANY_NAME-$PRODUCT_NAME && \
     service postgresql stop && \
     service supervisor stop && \
     chmod 755 /app/ds/*.sh && \
@@ -82,10 +82,10 @@ EXPOSE 80 443
     rm -rf /var/lib/apt/lists/* && \
     wget -P /var/www/  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz && \
     tar zxf /var/www/out.tgz -C /var/www/  && \
-    rm -rf /var/www/out.tgz && \
+    rm -rf /var/www/out.tgz
  #   mv /var/www/onlyoffice/documentserver/supervisor/*  /etc/supervisor/conf.data && \
  #   chmod 777 /etc/supervisor/conf.d/*
 
 VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /var/www/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis /usr/share/fonts/truetype/custom
 
-#ENTRYPOINT /app/ds/run-document-server.sh
+ENTRYPOINT /app/ds/run-document-server.sh

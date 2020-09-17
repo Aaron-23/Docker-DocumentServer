@@ -517,7 +517,7 @@ fi
 # nginx used as a proxy, and as data container status service.
 # it run in all cases.
 service nginx start
-
+apt-get -yq remove $COMPANY_NAME-$PRODUCT_NAME
 # Regenerate the fonts list and the fonts thumbnails
 documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
 documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
