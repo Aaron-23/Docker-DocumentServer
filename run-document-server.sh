@@ -532,7 +532,7 @@ supervisorctl status
 # it run in all cases.
 rm -rf  /etc/nginx/conf.d/*
 rm -rf /etc/nginx/sites-enabled/*
-cp /opt/onlyoffice/documentserver/nginx/onlyoffice-documentserver /etc/nginx/conf.d/onlyoffice-documentserver
+cp /opt/onlyoffice/documentserver/nginx/onlyoffice-documentserver /etc/nginx/sites-available/onlyoffice-documentserver
 ln -s /etc/nginx/sites-available/onlyoffice-documentserver /etc/nginx/sites-enabled/onlyoffice-documentserver
 service nginx restart
 
