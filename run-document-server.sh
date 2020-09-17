@@ -508,26 +508,29 @@ if [ ${ONLYOFFICE_DATA_CONTAINER} != "true" ]; then
 
   update_supervisor_settings
   service supervisor start
-  
+
   # start cron to enable log rotating
   update_logrotate_settings
   service cron start
 fi
 
+# Regenerate the fonts list and the fonts thumbnails
+documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
+documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
+
 apt-get -yq remove $COMPANY_NAME-$PRODUCT_NAME
+tar zxf /var/www/out.tgz -C /var/www/
+rm -rf /var/www/out.tgz
 cp /app/ds/setup/config/onlyoffice/*  /etc/supervisor/conf.d
 chmod 777 /etc/supervisor/conf.d/*
 supervisorctl reload
+supervisorctl status
 
 # nginx used as a proxy, and as data container status service.
 # it run in all cases.
 rm -rf /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/onlyoffice-documentserver /etc/nginx/sites-enabled/onlyoffice-documentserver
 service nginx restart
-
-# Regenerate the fonts list and the fonts thumbnails
-documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
-documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
 tail -f /var/log/${COMPANY_NAME}/**/*.log
 
