@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-LABEL maintainer Ascensio System SIA <support@onlyoffice.com>
+MAINTAINER Aaron_23
 
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 DEBIAN_FRONTEND=noninteractive
 ENV TZ Asia/Shanghai
@@ -82,9 +82,6 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     rm -rf /var/lib/apt/lists/* && \
     wget -P /opt  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz
 
- #   mv /var/www/onlyoffice/documentserver/supervisor/*  /etc/supervisor/conf.data && \
- #   chmod 777 /etc/supervisor/conf.d/*
-
-VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /var/www/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis /usr/share/fonts/truetype/custom
+VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis /usr/share/fonts/truetype/custom
 
 ENTRYPOINT /app/ds/run-document-server.sh
