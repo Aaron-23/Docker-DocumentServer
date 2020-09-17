@@ -530,9 +530,10 @@ supervisorctl status
 
 # nginx used as a proxy, and as data container status service.
 # it run in all cases.
-rm -rf /etc/nginx/sites-enabled/default
+rm -rf  /etc/nginx/conf.d/*
+rm -rf /etc/nginx/sites-enabled/*
+cp /opt/onlyoffice/documentserver/nginx/onlyoffice-documentserver /etc/nginx/conf.d/onlyoffice-documentserver
 ln -s /etc/nginx/sites-available/onlyoffice-documentserver /etc/nginx/sites-enabled/onlyoffice-documentserver
-cp /opt/onlyoffice/documentserver/nginx/ds.conf /etc/nginx/conf.d/
 service nginx restart
 
 tail -f /var/log/${COMPANY_NAME}/**/*.log
