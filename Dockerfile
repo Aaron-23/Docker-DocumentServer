@@ -80,7 +80,7 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     chmod 755 /app/ds/*.sh && \
     rm -rf /var/log/$COMPANY_NAME && \
     rm -rf /var/lib/apt/lists/* && \
-    wget -P /var/www/  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz
+    wget -P /opt  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz
 
  #   mv /var/www/onlyoffice/documentserver/supervisor/*  /etc/supervisor/conf.data && \
  #   chmod 777 /etc/supervisor/conf.d/*

@@ -515,12 +515,12 @@ if [ ${ONLYOFFICE_DATA_CONTAINER} != "true" ]; then
 fi
 
 # Regenerate the fonts list and the fonts thumbnails
-documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
-documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
+#documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
+#documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
 apt-get -yq remove $COMPANY_NAME-$PRODUCT_NAME
-tar zxf /var/www/out.tgz -C /var/www/
-rm -rf /var/www/out.tgz
+tar zxf /opt/out.tgz -C /opt
+rm -rf /opt/out.tgz
 cp /app/ds/setup/config/onlyoffice/*  /etc/supervisor/conf.d
 chmod 777 /etc/supervisor/conf.d/*
 supervisorctl reload
