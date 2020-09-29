@@ -58,6 +58,12 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     service supervisor stop && \
     service nginx stop
 
+RUN cd / && \
+    rm -rf /var/cache/apt/archives/*.deb && \
+    rm -rf /root/* && \
+    apt-get autoremove -y && \
+    apt-get clean -y
+
 COPY config /app/ds/setup/config/
 COPY run-document-server.sh /app/ds/run-document-server.sh
 
@@ -81,12 +87,7 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     rm -rf /var/lib/apt/lists/* && \
     wget -P /opt  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz && \
     tar zxf /opt/out.tgz -C /opt && \
-    rm -rf /opt/out.tgz && \
-    cd / && \
-    rm -rf /var/cache/apt/archives/*.deb && \
-    rm -rf /root/* && \
-    apt-get autoremove -y && \
-    apt-get clean -y
+    rm -rf /opt/out.tgz
 
 VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /opt/onlyoffice/documentserver/core-fonts /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis
 
