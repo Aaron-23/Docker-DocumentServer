@@ -1,13 +1,14 @@
 FROM ubuntu:18.04
-LABEL maintainer Ascensio System SIA <support@onlyoffice.com>
+MAINTAINER Aaron_23
 
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 DEBIAN_FRONTEND=noninteractive
+ENV TZ Asia/Shanghai
 
 ARG ONLYOFFICE_VALUE=onlyoffice
 
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     apt-get -y update && \
-    apt-get -yq install wget apt-transport-https gnupg locales && \
+    apt-get -yq install wget vim apt-transport-https gnupg locales && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0x8320ca65cb2de8e5 && \
     locale-gen en_US.UTF-8 && \
     apt-get -yq install \
@@ -78,8 +79,9 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     service supervisor stop && \
     chmod 755 /app/ds/*.sh && \
     rm -rf /var/log/$COMPANY_NAME && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    wget -P /opt  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz
 
-VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /var/www/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis /usr/share/fonts/truetype/custom
+VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis /usr/share/fonts/truetype/custom
 
 ENTRYPOINT /app/ds/run-document-server.sh
