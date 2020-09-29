@@ -514,25 +514,28 @@ if [ ${ONLYOFFICE_DATA_CONTAINER} != "true" ]; then
   service cron start
 fi
 
-# Regenerate the fonts list and the fonts thumbnails
-documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
-documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
+
 
 # Use manually compiled content
-tar zxf /opt/out.tgz -C /opt
-rm -rf /opt/out.tgz
 supervisorctl stop all >/dev/null
+rm -rf /var/www/*  
+tar zxf /var/www/out.tgz -C /var/www/
+rm -rf /var/www/out.tgz
 
 cp /app/ds/setup/config/onlyoffice/*  /etc/supervisor/conf.d
 chmod 777 /etc/supervisor/conf.d/*
 supervisorctl reload
 supervisorctl status
 
+# Regenerate the fonts list and the fonts thumbnails
+documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
+documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
+
 # nginx used as a proxy, and as data container status service.
 # it run in all cases.
 rm -rf  /etc/nginx/conf.d/*
 rm -rf /etc/nginx/sites-enabled/*
-cp /opt/onlyoffice/documentserver/nginx/onlyoffice-documentserver /etc/nginx/sites-available/onlyoffice-documentserver
+cp /var/www/nlyoffice/documentserver/nginx/onlyoffice-documentserver /etc/nginx/sites-available/onlyoffice-documentserver
 ln -s /etc/nginx/sites-available/onlyoffice-documentserver /etc/nginx/sites-enabled/onlyoffice-documentserver
 service nginx restart
 
