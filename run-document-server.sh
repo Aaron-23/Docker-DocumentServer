@@ -514,9 +514,6 @@ if [ ${ONLYOFFICE_DATA_CONTAINER} != "true" ]; then
   service cron start
 fi
 
-# Regenerate the fonts list and the fonts thumbnails
-documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
-documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
 # Use manually compiled content
 tar zxf /opt/out.tgz -C /opt
@@ -527,6 +524,11 @@ cp /app/ds/setup/config/onlyoffice/*  /etc/supervisor/conf.d
 chmod 777 /etc/supervisor/conf.d/*
 supervisorctl reload
 supervisorctl status
+
+# Regenerate the fonts list and the fonts thumbnails
+sed -i s*/var/www/*/opt/* /usr/bin/documentserver-generate-allfonts.sh
+documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
+documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
 # nginx used as a proxy, and as data container status service.
 # it run in all cases.
