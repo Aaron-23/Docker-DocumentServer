@@ -11,7 +11,7 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     apt-get -yq install wget vim apt-transport-https gnupg locales && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0x8320ca65cb2de8e5 && \
     locale-gen en_US.UTF-8 && \
-    apt-get -yq install \
+    apt-get -yq --no-install-recommends install \
         adduser \
         apt-utils \
         bomstrip \
@@ -57,7 +57,11 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     service rabbitmq-server stop && \
     service supervisor stop && \
     service nginx stop && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/archives/*.deb && \
+    apt-get autoremove -y && \
+    apt-get clean -y 
+
 
 COPY config /app/ds/setup/config/
 COPY run-document-server.sh /app/ds/run-document-server.sh
@@ -81,12 +85,9 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     rm -rf /var/log/$COMPANY_NAME && \
     rm -rf /var/lib/apt/lists/* && \
     wget -P /opt  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/out.tgz && \
-    wget -P /opt  https://goodrain-delivery.oss-cn-hangzhou.aliyuncs.com/cn.tgz && \
     tar zxf /opt/out.tgz -C /opt && \
-    mkdir -p /opt/onlyoffice/documentserver/core-fonts/custom && \
-    tar zxf /opt/cn.tgz -C /opt/onlyoffice/documentserver/core-fonts/custom && \
-    rm -rf /opt/out.tgz && \
-    rm -rf /opt/cn.tgz
+    rm -rf /opt/out.tgz
+
 
 VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis  /opt/onlyoffice/documentserver/core-fonts
 
