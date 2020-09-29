@@ -519,6 +519,8 @@ documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
 documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
 # Use manually compiled content
+tar zxf /opt/out.tgz -C /opt
+rm -rf /opt/out.tgz
 supervisorctl stop all >/dev/null
 
 cp /app/ds/setup/config/onlyoffice/*  /etc/supervisor/conf.d
