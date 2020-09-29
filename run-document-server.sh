@@ -515,6 +515,7 @@ if [ ${ONLYOFFICE_DATA_CONTAINER} != "true" ]; then
 fi
 
 # Regenerate the fonts list and the fonts thumbnails
+sed -i s*/var/www/*/opt/* /usr/bin/documentserver-generate-allfonts.sh
 documentserver-generate-allfonts.sh ${ONLYOFFICE_DATA_CONTAINER}
 documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
