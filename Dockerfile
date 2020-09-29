@@ -58,9 +58,7 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     service supervisor stop && \
     service nginx stop && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /var/cache/apt/archives/*.deb && \
-    apt-get autoremove -y && \
-    apt-get clean -y 
+    rm -rf /var/cache/apt/archives/*.deb
 
 
 COPY config /app/ds/setup/config/
@@ -75,6 +73,8 @@ ARG PRODUCT_NAME=documentserver
 ENV COMPANY_NAME=$COMPANY_NAME \
     PRODUCT_NAME=$PRODUCT_NAME
 
+VOLUME /opt/onlyoffice/documentserver/core-fonts
+
 RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     apt-get -y update && \
     service postgresql start && \
@@ -88,7 +88,6 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     tar zxf /opt/out.tgz -C /opt && \
     rm -rf /opt/out.tgz
 
-
-VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis  /opt/onlyoffice/documentserver/core-fonts
+VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis 
 
 ENTRYPOINT /app/ds/run-document-server.sh
