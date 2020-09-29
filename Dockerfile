@@ -8,10 +8,10 @@ ARG ONLYOFFICE_VALUE=onlyoffice
 
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     apt-get -y update && \
-    apt-get install  --no-install-recommends --no-install-suggests  -y  wget vim apt-transport-https gnupg locales && \
+    apt-get -yq install wget vim apt-transport-https gnupg locales && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0x8320ca65cb2de8e5 && \
     locale-gen en_US.UTF-8 && \
-    apt-get install  --no-install-recommends --no-install-suggests  -y  \
+    apt-get -yq --no-install-recommends install \
         adduser \
         apt-utils \
         bomstrip \
@@ -56,13 +56,10 @@ RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d && \
     service redis-server stop && \
     service rabbitmq-server stop && \
     service supervisor stop && \
-    service nginx stop
+    service nginx stop && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt/archives/*.deb
 
-RUN cd / && \
-    rm -rf /var/cache/apt/archives/*.deb && \
-    rm -rf /root/* && \
-    apt-get autoremove -y && \
-    apt-get clean -y
 
 COPY config /app/ds/setup/config/
 COPY run-document-server.sh /app/ds/run-document-server.sh
@@ -76,10 +73,12 @@ ARG PRODUCT_NAME=documentserver
 ENV COMPANY_NAME=$COMPANY_NAME \
     PRODUCT_NAME=$PRODUCT_NAME
 
+VOLUME /opt/onlyoffice/documentserver/core-fonts
+
 RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     apt-get -y update && \
     service postgresql start && \
-    apt-get install  --no-install-recommends --no-install-suggests  -y  $COMPANY_NAME-$PRODUCT_NAME && \
+    apt-get -yq install $COMPANY_NAME-$PRODUCT_NAME && \
     service postgresql stop && \
     service supervisor stop && \
     chmod 755 /app/ds/*.sh && \
@@ -89,6 +88,6 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     tar zxf /opt/out.tgz -C /opt && \
     rm -rf /opt/out.tgz
 
-VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis
+VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis 
 
 ENTRYPOINT /app/ds/run-document-server.sh
