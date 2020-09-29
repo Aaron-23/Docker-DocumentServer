@@ -521,7 +521,6 @@ documentserver-static-gzip.sh ${ONLYOFFICE_DATA_CONTAINER}
 
 # Use manually compiled content
 supervisorctl stop all >/dev/null
-apt-get  -y remove onlyoffice-documentserver >/dev/null
 
 cp /app/ds/setup/config/onlyoffice/*  /etc/supervisor/conf.d
 chmod 777 /etc/supervisor/conf.d/*
@@ -535,7 +534,6 @@ rm -rf /etc/nginx/sites-enabled/*
 cp /opt/onlyoffice/documentserver/nginx/onlyoffice-documentserver /etc/nginx/sites-available/onlyoffice-documentserver
 ln -s /etc/nginx/sites-available/onlyoffice-documentserver /etc/nginx/sites-enabled/onlyoffice-documentserver
 service nginx restart
-
 
 tail -f /var/log/${COMPANY_NAME}/**/*.log
 

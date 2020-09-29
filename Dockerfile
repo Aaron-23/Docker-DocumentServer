@@ -89,6 +89,6 @@ RUN echo "$REPO_URL" | tee /etc/apt/sources.list.d/ds.list && \
     tar zxf /opt/out.tgz -C /opt && \
     rm -rf /opt/out.tgz
 
-VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /opt/onlyoffice/documentserver/core-fonts /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis
+VOLUME /var/log/$COMPANY_NAME /var/lib/$COMPANY_NAME /opt/$COMPANY_NAME/Data /var/lib/postgresql /var/lib/rabbitmq /var/lib/redis
 
 ENTRYPOINT /app/ds/run-document-server.sh
